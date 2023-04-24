@@ -12,7 +12,7 @@ import { readDeck } from "../utils/api";
 
 function Study() {
   let { deckId } = useParams();
-  let [deck, setDeck] = useState({});
+  const [deck, setDeck] = useState({});
   let [cardIndex, setCardIndex] = useState(0);
   let [side, setSide] = useState(true);
 
@@ -42,47 +42,70 @@ function Study() {
     }
   }
 
-  return (
-    <div>
-      <h1>{deck.name}</h1>
-      <nav aria-label="breadcrumb">
-        <ol className="breadcrumb">
-          <li className="breadcrumb-item">
-            <Link to="/">Home</Link>
-          </li>
-          <li className="breadcrumb-item">
-            <Link to="#">{deck.name}</Link>
-          </li>
-          <li className="breadcrumb-item active" aria-current="page">
-            Data
-          </li>
-        </ol>
-      </nav>
+  if (deck.cards?.length < 3) {
+    return (
+      <div>
+        <nav aria-label="breadcrumb">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Home</Link>
+            </li>
+            <li className="breadcrumb-item">
+              <Link to="#">{deck.name}</Link>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Data
+            </li>
+          </ol>
+        </nav>
+        <h3>MORE CARDS NEEDED</h3>
+        <h3>You need at least 3 cards in the deck.</h3>
+      </div>
+    );
+  } else
+    return (
+      <div>
+        <h1>{deck.name}</h1>
+        <nav aria-label="breadcrumb">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/">Home</Link>
+            </li>
+            <li className="breadcrumb-item">
+              <Link to="#">{deck.name}</Link>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Data
+            </li>
+          </ol>
+        </nav>
 
-      <div className="card">
-        <div className="card-body">
-          <h3 className="card-title">{deck.name}</h3>
-          <h3 className="card-title">
-            Card {cardIndex + 1} of {deck.cards?.length}
-          </h3>
-          <h3 className="card-title">
-            {side ? deck.cards[cardIndex]?.front : deck.cards[cardIndex]?.back}
-          </h3>
-        </div>
-        <div>
-          <button className="card-text" onClick={flipHandler}>
-            Flip
-          </button>
-          <button
-            className="card-text"
-            onClick={() => setCardIndex(cardIndex + 1)}
-          >
-            Next
-          </button>
+        <div className="card">
+          <div className="card-body">
+            <h3 className="card-title">{deck.name}</h3>
+            <h3 className="card-title">
+              Card {cardIndex + 1} of {deck.cards?.length}
+            </h3>
+            <h3 className="card-title">
+              {side
+                ? deck.cards[cardIndex]?.front
+                : deck.cards[cardIndex]?.back}
+            </h3>
+          </div>
+          <div>
+            <button className="card-text" onClick={flipHandler}>
+              Flip
+            </button>
+            <button
+              className="card-text"
+              onClick={() => setCardIndex(cardIndex + 1)}
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 }
 
 export default Study;

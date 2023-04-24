@@ -14,7 +14,7 @@ function Deck ({ data }) {
   </div>
 
   <div>
-  <NavLink to={`deck/${data.id}`}><button className="card-text">View</button></NavLink>
+    <NavLink to={`deck/${data.id}`}><button className="card-text">View</button></NavLink>
     <NavLink to={`deck/${data.id}/study`}><button>Study</button></NavLink>
     <button className="card-text">Delete</button>
   </div>

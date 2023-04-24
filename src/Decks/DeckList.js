@@ -10,13 +10,10 @@ function DeckList () {
     useEffect(() => {
         listDecks()
             .then((decks) => {
-            console.log('Promise Resolved', decks)
             setDeckList(decks)
             })
         },[]
     )
-    
-    console.log('before return', deckList)
     
     return <div>
         {deckList.map((oneDeck, indx) => <Deck key={indx} data={oneDeck} />)}
