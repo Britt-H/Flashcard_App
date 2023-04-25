@@ -16,19 +16,20 @@ import DeckList from "../Decks/DeckList";
 import Study from "../Decks/Study";
 import ViewDeck from "../Decks/ViewDeck";
 import CreateDeck from "../Decks/CreateDeck"
-import { listDecks } from "../utils/api";
+import { listDecks, deleteCard, deleteDeck } from "../utils/api";
 
 function Layout() {
 
   let [deckList, setDeckList] = useState([])
-
-  useEffect(() => {
-      listDecks()
+  
+  function buildDeckList () {
+    listDecks()
           .then((decks) => {
           setDeckList(decks)
           })
-      },[]
-  )
+  }
+
+  useEffect(buildDeckList,[])
 
   return (
     <>
@@ -40,13 +41,13 @@ function Layout() {
             <Study />
           </Route>
           <Route path="/deck/new">
-            <CreateDeck />
+            <CreateDeck buildDeckList={buildDeckList}/>
           </Route>
           <Route path="/deck/:deckId">
-            <ViewDeck deckList={deckList}/>
+            <ViewDeck buildDeckList={buildDeckList} deckList={deckList}/>
           </Route>
           <Route path="/" exact={true} >
-            <DeckList deckList={deckList}/>
+            <DeckList buildDeckList={buildDeckList} deckList={deckList}/>
           </Route> 
           <Route>
             <NotFound />

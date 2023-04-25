@@ -14,8 +14,9 @@ import { createDeck } from "../utils/api";
 
 //ADD CONSOLE LOG TO TEST FORM DATA
 
-function CreateDeck() {
+function CreateDeck({ buildDeckList }) {
 
+    const history = useHistory()
   let defaultForm = {
     name: "",
     description: "",
@@ -33,7 +34,11 @@ function CreateDeck() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    createDeck(formData);
+    createDeck(formData)
+        .then(res => {
+            buildDeckList()
+            history.push(`/deck/${res.id}`)
+        })
   }
 
   return (
@@ -74,9 +79,10 @@ function CreateDeck() {
         <NavLink to={`/`}>
           <button>Cancel</button>
         </NavLink>
-        <NavLink to={`/deck/1`}>
+        {/* Async Await || .thens ? */}
+        {/* <NavLink to={``}> */}
           <button onClick={handleSubmit}>Submit</button>
-        </NavLink>
+        {/* </NavLink> */}
       </div>
     </div>
   );

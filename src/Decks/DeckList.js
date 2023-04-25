@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 import Deck from "./Deck";
 
-function DeckList({ deckList }) {
+function DeckList({ deckList, buildDeckList }) {
   return (
     <div>
       <Route>
@@ -21,7 +21,7 @@ function DeckList({ deckList }) {
         </NavLink>
       </Route>
       {deckList.map((oneDeck, indx) => (
-        <Deck key={indx} data={oneDeck} />
+        <Deck buildDeckList={buildDeckList} key={indx} data={oneDeck} />
       ))}
     </div>
   );

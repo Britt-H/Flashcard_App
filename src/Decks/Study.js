@@ -35,10 +35,8 @@ function Study() {
     if (cardIndex >= deck.cards?.length) {
       let result = window.confirm("Restart Card?")
       if (result) {
-        // window.location.replace(`/deck/${deckId}/study`);
         history.go(0)
       } else {
-        // window.location.replace("/");
         history.push("/")
       }
     }
@@ -57,7 +55,7 @@ function Study() {
               <Link to="/">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/deck/deckId">{deck.name}</Link>
+              <Link to={`/deck/${deckId}`}>{deck.name}</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Data
@@ -78,7 +76,7 @@ function Study() {
               <Link to="/">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/deck/deckId">{deck.name}</Link>
+              <Link to={`/deck/${deckId}`}>{deck.name}</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Data
