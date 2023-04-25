@@ -15,6 +15,7 @@ function Study() {
   const [deck, setDeck] = useState({});
   let [cardIndex, setCardIndex] = useState(0);
   let [side, setSide] = useState(true);
+  const history = useHistory()
 
   function flipHandler() {
     if (side) {
@@ -30,16 +31,21 @@ function Study() {
     });
   }, []);
 
+  useEffect(() => {
+    if (cardIndex >= deck.cards?.length) {
+      let result = window.confirm("Restart Card?")
+      if (result) {
+        // window.location.replace(`/deck/${deckId}/study`);
+        history.go(0)
+      } else {
+        // window.location.replace("/");
+        history.push("/")
+      }
+    }
+  },[cardIndex])
+
   if (!deck.cards) {
     return <div>Loading</div>;
-  }
-
-  if (cardIndex >= deck.cards.length) {
-    if (window.confirm("Restart Card?")) {
-      window.location.replace(`/deck/${deckId}/study`);
-    } else {
-      window.location.replace("/");
-    }
   }
 
   if (deck.cards?.length < 3) {
@@ -51,7 +57,7 @@ function Study() {
               <Link to="/">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="#">{deck.name}</Link>
+              <Link to="/deck/deckId">{deck.name}</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Data
@@ -72,7 +78,7 @@ function Study() {
               <Link to="/">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="#">{deck.name}</Link>
+              <Link to="/deck/deckId">{deck.name}</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Data
