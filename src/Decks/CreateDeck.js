@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Link,
-  Switch,
   useHistory,
-  useLocation,
-  useRouteMatch,
-  useParams,
   NavLink,
 } from "react-router-dom";
 import { createDeck } from "../utils/api";
