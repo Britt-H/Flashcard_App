@@ -9,64 +9,66 @@ import {
   useParams,
   NavLink,
 } from "react-router-dom";
-import Deck from "./Deck";
-import { deleteDeck } from "../utils/api";
+import { deleteDeck, deleteCard, readDeck } from "../utils/api";
+
+//NEEDS TO USE readDeck function
+//MAY NEED TO LOOK AT OTHER COMPONENTS REQUIREMENTS
 
 function ViewDeck({ deckList, buildDeckList }) {
   const { deckId } = useParams();
 
+  //Might replace targetDeck with readDeck use
   let targetDeck = deckList.find((deck) => {
     return Number(deck.id) === Number(deckId);
   });
 
   const history = useHistory();
 
-  // useEffect(() => {
-  //   if (cardIndex >= deck.cards?.length) {
-  //     let result = window.confirm("Restart Card?")
-  //     if (result) {
-  //       history.go(0)
-  //     } else {
-  //       history.push("/")
-  //     }
-  //   }
-  // },[cardIndex])
-
   function handleDeleteDeck(event) {
     event.preventDefault();
-    let result = window.confirm("Delete Card?");
+    let result = window.confirm("Delete Deck?");
     if (result) {
-      deleteDeck(deckId).then((res) => {
+      deleteDeck(deckId).then(() => {
         buildDeckList();
         history.push(`/`);
       });
     }
   }
 
+  function handleDeleteCard(cardId) {
+    let result = window.confirm("Delete Card?");
+    if (result) {
+      deleteCard(cardId).then(() => {
+        buildDeckList();
+        history.push(`/decks/${deckId}`);
+      });
+    }
+  }
+
   return (
     <div>
-      This is the deck you want to view
       <div>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <Link to="/">Home</Link>
             </li>
-            <li className="breadcrumb-item">
-              {targetDeck?.name}
-              {/* <Link to={`/deck/${deckList?.id}`}>{targetDeck?.name}</Link> */}
-            </li>
+            <li className="breadcrumb-item">{targetDeck?.name}</li>
           </ol>
         </nav>
       </div>
       <div>
         <h3>{targetDeck?.name}</h3>
         <p className="card-text">{targetDeck?.description}</p>
-        <button>Edit</button>
-        <Link to={`/deck/${targetDeck?.id}/study`}>
+        <Link to={`/decks/${targetDeck?.id}/edit`}>
+          <button>Edit</button>
+        </Link>
+        <Link to={`/decks/${targetDeck?.id}/study`}>
           <button>Study</button>
         </Link>
-        <button>+Add Card</button>
+        <Link to={`/decks/${targetDeck?.id}/cards/new`}>
+          <button>Add Card</button>
+        </Link>
         <button className="card-text" onClick={handleDeleteDeck}>
           Delete
         </button>
@@ -78,8 +80,12 @@ function ViewDeck({ deckList, buildDeckList }) {
               <li key={indx} className="list-group-item">
                 <p>{card?.front}</p>
                 <p>{card?.back}</p>
-                <button>edit</button>
-                <button>Delete</button>
+                <Link to={`/decks/${targetDeck?.id}/cards/${card.id}/edit`}>
+                  <button>Edit</button>
+                </Link>
+                <button className="card-text" onClick={() => handleDeleteCard(card.id)}>
+                  Delete
+                </button>
               </li>
             );
           })}

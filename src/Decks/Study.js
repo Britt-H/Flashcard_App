@@ -55,14 +55,14 @@ function Study() {
               <Link to="/">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to={`/deck/${deckId}`}>{deck.name}</Link>
+              <Link to={`/decks/${deckId}`}>{deck.name}</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Data
             </li>
           </ol>
         </nav>
-        <h3>MORE CARDS NEEDED</h3>
+        <h3>Not enough cards</h3>
         <h3>You need at least 3 cards in the deck.</h3>
       </div>
     );
@@ -76,7 +76,7 @@ function Study() {
               <Link to="/">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to={`/deck/${deckId}`}>{deck.name}</Link>
+              <Link to={`/decks/${deckId}`}>{deck.name}</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Data

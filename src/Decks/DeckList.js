@@ -16,7 +16,7 @@ function DeckList({ deckList, buildDeckList }) {
   return (
     <div>
       <Route>
-        <NavLink to={`deck/new`}>
+        <NavLink to={`decks/new`}>
           <button>Create Deck</button>
         </NavLink>
       </Route>

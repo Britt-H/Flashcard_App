@@ -9,20 +9,26 @@ import {
   useParams,
   NavLink,
 } from "react-router-dom";
-import { createDeck } from "../utils/api";
+import { updateDeck } from "../utils/api";
 
-function CreateDeck({ buildDeckList }) {
+function EditDeck({ deckList, buildDeckList }) {
+  const { deckId } = useParams();
   const history = useHistory();
+
+  let targetDeck = deckList.find((deck) => {
+    return Number(deck.id) === Number(deckId);
+  });
+
 
   let defaultForm = {
     name: "",
     description: "",
   };
 
-  let [formData, setFormData] = useState(defaultForm);
+
+  const [formData, setFormData] = useState(defaultForm);
 
   function handleInput(event) {
-    event.preventDefault();
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
@@ -31,7 +37,8 @@ function CreateDeck({ buildDeckList }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    createDeck(formData).then((res) => {
+    formData.id = targetDeck && targetDeck.id
+    updateDeck(formData).then((res) => {
       buildDeckList();
       history.push(`/decks/${res.id}`);
     });
@@ -39,39 +46,39 @@ function CreateDeck({ buildDeckList }) {
 
   return (
     <div>
-      <div>
-        <nav aria-label="breadcrumb">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <Link to="/">Home</Link>
-            </li>
-            <li className="breadcrumb-item">New Deck</li>
-          </ol>
-        </nav>
-      </div>
-      <h1>Create Deck</h1>
+      <nav aria-label="breadcrumb">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item">
+            <Link to="/">Home</Link>
+          </li>
+          <li className="breadcrumb-item">
+            <Link to={`/decks/${deckId}`}>{targetDeck && targetDeck.name}</Link>
+          </li>
+          <li className="breadcrumb-item">Edit Deck</li>
+        </ol>
+      </nav>
       <form name="create">
-        <label htmlFor="name" />
+        <label htmlFor="name">Name</label>
         <input
           type="text"
           id="name"
           name="name"
-          placeholder={"Name"}
+          placeholder={`${targetDeck && targetDeck.name}`}
           value={formData.name}
           onChange={handleInput}
         />
-        <label htmlFor="description" />
+        <label htmlFor="description">Description</label>
         <textarea
           type="text"
           id="description"
           name="description"
-          placeholder="Description"
+          placeholder={`${targetDeck && targetDeck.description}`}
           value={formData.description}
           onChange={handleInput}
         />
       </form>
       <div>
-        <NavLink to={`/`}>
+        <NavLink to={`/decks/${deckId}`}>
           <button>Cancel</button>
         </NavLink>
         <button onClick={handleSubmit}>Submit</button>
@@ -80,4 +87,4 @@ function CreateDeck({ buildDeckList }) {
   );
 }
 
-export default CreateDeck;
+export default EditDeck;

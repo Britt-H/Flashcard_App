@@ -16,7 +16,7 @@ function Deck({ data, buildDeckList }) {
 
   function handleDeleteDeck(event) {
     event.preventDefault();
-    let result = window.confirm("Delete Card?");
+    let result = window.confirm("Delete Deck?");
     if (result) {
       deleteDeck(data.id).then((res) => {
         buildDeckList();
@@ -29,7 +29,7 @@ function Deck({ data, buildDeckList }) {
     <div className="card">
       <div className="card-body">
         <h3 className="card-title">{data.name} </h3>
-        <h3 className="card-title">{data.cards.length}</h3>
+        <h3 className="card-title">{data.cards.length} cards</h3>
       </div>
 
       <div>
@@ -37,16 +37,15 @@ function Deck({ data, buildDeckList }) {
       </div>
 
       <div>
-        <NavLink to={`deck/${data.id}`}>
+        <NavLink to={`decks/${data.id}`}>
           <button className="card-text">View</button>
         </NavLink>
-        <NavLink to={`deck/${data.id}/study`}>
+        <NavLink to={`decks/${data.id}/study`}>
           <button>Study</button>
         </NavLink>
         <button className="card-text" onClick={handleDeleteDeck}>
           Delete
         </button>
-        {/* <button onClick={handleSubmit}>Submit</button> */}
       </div>
     </div>
   );
