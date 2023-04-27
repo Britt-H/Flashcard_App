@@ -5,29 +5,28 @@ import {
   useHistory,
   useParams,
 } from "react-router-dom";
+import CardForm from "./CardForm";
 import { readCard, readDeck, updateCard } from "../utils/api";
 
-function EditCard({ buildDeckList }) {
+function EditCard() {
   const { deckId, cardId } = useParams();
   const history = useHistory();
 
   const [deck, setDeck] = useState({});
-  const [card, setCard] = useState({});
-
-  useEffect(() => {
-    readDeck(deckId).then((res) => {
-      setDeck(res);
-      readCard(cardId).then((res) => {
-        setCard(res);
-      });
-    });
-  }, []);
-
   let initialFormData = {
     front: "",
     back: "",
   };
   const [formData, setFormData] = useState(initialFormData);
+
+  useEffect(() => {
+    readDeck(deckId).then((res) => {
+      setDeck(res);
+      readCard(cardId).then((res) => {
+        setFormData(res);
+      });
+    });
+  }, []);
 
   function handleInputChange(event) {
     event.preventDefault();
@@ -39,16 +38,8 @@ function EditCard({ buildDeckList }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    readDeck(deckId).then((res) => {
-      readCard(cardId).then((res) => {
-        formData.id = res.id;
-        formData.deckId = res.deckId;
-
-        updateCard(formData).then((res) => {
-          buildDeckList();
-          history.push(`/decks/${deckId}`);
-        });
-      });
+    updateCard(formData).then(() => {
+      history.push(`/decks/${deckId}`);
     });
   }
 
@@ -70,32 +61,11 @@ function EditCard({ buildDeckList }) {
 
       <h1>Edit Card</h1>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="front"></label>
-          Front
-          <textarea
-            type="text"
-            name="front"
-            id="front"
-            value={card && card.front}
-            onChange={handleInputChange}
-          ></textarea>
-          <label htmlFor="back"></label>
-          Back
-          <textarea
-            type="text"
-            name="back"
-            id="back"
-            value={card && card.back}
-            onChange={handleInputChange}
-          ></textarea>
-        </div>
-        <Link to={"/"}>
-          <button>Done</button>
-        </Link>
-        <button onClick={handleSubmit}>Save</button>
-      </form>
+      <CardForm
+        formData={formData}
+        handleSubmit={handleSubmit}
+        handleInputChange={handleInputChange}
+      />
     </React.Fragment>
   );
 }

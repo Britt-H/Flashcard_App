@@ -36,6 +36,9 @@ function ViewDeck({ buildDeckList }) {
     if (result) {
       deleteCard(cardId).then(() => {
         buildDeckList();
+        readDeck(deckId).then((res) => {
+          setDeck(res);
+        });
         history.push(`/decks/${deckId}`);
       });
     }

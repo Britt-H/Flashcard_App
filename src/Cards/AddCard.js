@@ -4,22 +4,22 @@ import {
   Link,
   useHistory,
   useParams,
-  NavLink,
 } from "react-router-dom";
 import { createCard, readDeck } from "../utils/api";
+import CardForm from "./CardForm";
 
-function AddCard({ deckList, buildDeckList }) {
+
+
+function AddCard() {
   const { deckId } = useParams();
   const history = useHistory();
 
-  let defaultForm = {
-    front: "",
-    back: "",
-  };
-
-  const [formData, setFormData] = useState(defaultForm);
-
-  const [deck, setDeck] = useState({});
+  const [deck, setDeck] = useState({});    
+  let initialFormData ={
+    front: '',
+    back: '',
+    }
+    const [formData, setFormData] = useState(initialFormData)
 
   useEffect(() => {
     readDeck(deckId).then((res) => {
@@ -27,63 +27,40 @@ function AddCard({ deckList, buildDeckList }) {
     });
   }, []);
 
-  function handleInput(event) {
-    setFormData({
-      ...formData,
-      [event.target?.name]: event.target?.value,
-    });
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    createCard(Number(deckId), formData).then(() => {
-      buildDeckList();
+  function handleCardSubmit(event) {
+    event.preventDefault()
+    createCard(deckId, formData).then(() => {
       history.push(`/decks/${deckId}`);
     });
   }
 
+  function handleInputChange(event){
+    event.preventDefault();
+    setFormData({
+        ...formData,
+        [event.target.name]: event.target.value
+    });
+};
+
   return (
-    <div>
-      <div>
-        <nav aria-label="breadcrumb">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <Link to="/">Home</Link>
-            </li>
-            <li className="breadcrumb-item">
-              <Link to={`/decks/${deckId}`}>{deck && deck.name}</Link>
-            </li>
-            <li className="breadcrumb-item">Add Card</li>
-          </ol>
-        </nav>
-      </div>
-      <form name="create">
-        <label htmlFor="front" />
-        <textarea
-          type="text"
-          id="front"
-          name="front"
-          placeholder={"Front"}
-          value={formData.name}
-          onChange={handleInput}
-        />
-        <label htmlFor="back" />
-        <textarea
-          type="text"
-          id="back"
-          name="back"
-          placeholder="Back"
-          value={formData.description}
-          onChange={handleInput}
-        />
-      </form>
-      <div>
-        <NavLink to={`/decks/${deckId}`}>
-          <button>Done</button>
-        </NavLink>
-        <button onClick={handleSubmit}>Save</button>
-      </div>
-    </div>
+    <React.Fragment>
+        <div>
+        <div>
+            <nav aria-label="breadcrumb">
+            <ol className="breadcrumb">
+                <li className="breadcrumb-item">
+                <Link to="/">Home</Link>
+                </li>
+                <li className="breadcrumb-item">
+                <Link to={`/decks/${deckId}`}>{deck && deck.name}</Link>
+                </li>
+                <li className="breadcrumb-item">Add Card</li>
+            </ol>
+            </nav>
+        </div>
+        <CardForm formData={formData} handleSubmit={handleCardSubmit} handleInputChange={handleInputChange} />
+        </div>
+    </React.Fragment>
   );
 }
 

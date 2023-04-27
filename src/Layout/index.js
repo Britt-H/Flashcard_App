@@ -15,6 +15,7 @@ import EditDeck from "../Decks/EditDeck";
 import AddCard from "../Cards/AddCard";
 import EditCard from "../Cards/EditCard";
 
+
 function Layout() {
 
   let [deckList, setDeckList] = useState([])
@@ -34,10 +35,10 @@ function Layout() {
       <div className="container">
         <Switch>
           <Route path="/decks/:deckId/cards/:cardId/edit">
-            <EditCard deckList={deckList} buildDeckList={buildDeckList} />
+            <EditCard buildDeckList={buildDeckList} />
           </Route>
           <Route path="/decks/:deckId/cards/new">
-            <AddCard deckList={deckList} buildDeckList={buildDeckList}/>
+            <AddCard buildDeckList={buildDeckList}/>
           </Route>
           <Route path="/decks/:deckId/study">
             <Study />
@@ -46,10 +47,10 @@ function Layout() {
             <CreateDeck buildDeckList={buildDeckList}/>
           </Route>
           <Route path="/decks/:deckId/edit">
-            <EditDeck buildDeckList={buildDeckList} deckList={deckList}/>
+            <EditDeck buildDeckList={buildDeckList} />
           </Route>
           <Route path="/decks/:deckId">
-            <ViewDeck buildDeckList={buildDeckList} deckList={deckList}/>
+            <ViewDeck buildDeckList={buildDeckList} />
           </Route>
           <Route path="/" exact={true} >
             <DeckList buildDeckList={buildDeckList} deckList={deckList}/>
