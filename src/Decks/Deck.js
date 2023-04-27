@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import {
   BrowserRouter as Router,
-  Link,
-  Switch,
   useHistory,
-  useLocation,
-  useRouteMatch,
-  useParams,
   NavLink,
 } from "react-router-dom";
 import { deleteDeck } from "../utils/api";

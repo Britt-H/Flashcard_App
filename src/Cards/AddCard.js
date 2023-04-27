@@ -2,14 +2,11 @@ import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Link,
-  Switch,
   useHistory,
-  useLocation,
-  useRouteMatch,
   useParams,
   NavLink,
 } from "react-router-dom";
-import { createCard } from "../utils/api";
+import { createCard, readDeck } from "../utils/api";
 
 function AddCard({ deckList, buildDeckList }) {
   const { deckId } = useParams();
@@ -22,9 +19,13 @@ function AddCard({ deckList, buildDeckList }) {
 
   const [formData, setFormData] = useState(defaultForm);
 
-  let targetDeck = deckList.find((deck) => {
-    return Number(deck.id) === Number(deckId);
-  });
+  const [deck, setDeck] = useState({});
+
+  useEffect(() => {
+    readDeck(deckId).then((res) => {
+      setDeck(res);
+    });
+  }, []);
 
   function handleInput(event) {
     setFormData({
@@ -50,7 +51,7 @@ function AddCard({ deckList, buildDeckList }) {
               <Link to="/">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to={`/decks/${deckId}`}>{targetDeck?.name}</Link>
+              <Link to={`/decks/${deckId}`}>{deck && deck.name}</Link>
             </li>
             <li className="breadcrumb-item">Add Card</li>
           </ol>

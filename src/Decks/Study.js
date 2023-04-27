@@ -1,50 +1,59 @@
 import React, { useState, useEffect } from "react";
+import { readDeck } from "../utils/api";
 import {
   BrowserRouter as Router,
   Link,
-  Switch,
   useHistory,
-  useLocation,
-  useRouteMatch,
   useParams,
+  NavLink,
 } from "react-router-dom";
-import { readDeck } from "../utils/api";
 
 function Study() {
-  let { deckId } = useParams();
-  const [deck, setDeck] = useState({});
-  let [cardIndex, setCardIndex] = useState(0);
+  const { deckId } = useParams();
+  const history = useHistory();
+
+  let [deck, setDeck] = useState({
+    id: "",
+    name: "",
+    description: "",
+    cards: [],
+  });
   let [side, setSide] = useState(true);
-  const history = useHistory()
+  let [cardIndex, setCardIndex] = useState(0);
+  const [show, setShow] = useState(true);
 
   function flipHandler() {
     if (side) {
       setSide(false);
+      setShow(!show);
     } else {
       setSide(true);
+      setShow(!show);
     }
   }
 
-  useEffect(() => {
-    readDeck(deckId).then((decks) => {
-      setDeck(decks);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (cardIndex >= deck.cards?.length) {
-      let result = window.confirm("Restart Card?")
-      if (result) {
-        history.go(0)
+  function nextHandler() {
+    setSide(true);
+    setCardIndex(cardIndex + 1);
+    setShow(!show);
+    if (cardIndex >= deck.cards.length - 1) {
+      if (
+        window.confirm(
+          "Restart cards?\nClick 'cancel' to return to the home page"
+        )
+      ) {
+        history.go(0);
       } else {
-        history.push("/")
+        history.push("/");
       }
     }
-  },[cardIndex])
-
-  if (!deck.cards) {
-    return <div>Loading</div>;
   }
+
+  useEffect(() => {
+    readDeck(deckId).then((deck) => {
+      setDeck(deck);
+    });
+  }, []);
 
   if (deck.cards?.length < 3) {
     return (
@@ -58,18 +67,29 @@ function Study() {
               <Link to={`/decks/${deckId}`}>{deck.name}</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Data
+              Study
             </li>
           </ol>
         </nav>
-        <h3>Not enough cards</h3>
-        <h3>You need at least 3 cards in the deck.</h3>
+        <h1>{deck.name}: Study</h1>
+        <div className="card">
+          <div className="card-body">
+            <h5 className="card-title">Not enough cards.</h5>
+            <p className="card-text">
+              You need at least 3 cards to study. There are {deck.cards.length}{" "}
+              cards in this deck.
+            </p>
+
+            <NavLink to={`/decks/${deckId}/cards/new`}>
+              <button>+ Add New</button>
+            </NavLink>
+          </div>
+        </div>
       </div>
     );
-  } else
+  } else {
     return (
       <div>
-        <h1>{deck.name}</h1>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
@@ -79,37 +99,28 @@ function Study() {
               <Link to={`/decks/${deckId}`}>{deck.name}</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Data
+              Study
             </li>
           </ol>
         </nav>
-
+        <h1>{deck.name}: Study</h1>
         <div className="card">
           <div className="card-body">
-            <h3 className="card-title">{deck.name}</h3>
-            <h3 className="card-title">
+            <h5 className="card-title">
               Card {cardIndex + 1} of {deck.cards?.length}
-            </h3>
-            <h3 className="card-title">
+            </h5>
+            <p className="card-text">
               {side
                 ? deck.cards[cardIndex]?.front
                 : deck.cards[cardIndex]?.back}
-            </h3>
-          </div>
-          <div>
-            <button className="card-text" onClick={flipHandler}>
-              Flip
-            </button>
-            <button
-              className="card-text"
-              onClick={() => setCardIndex(cardIndex + 1)}
-            >
-              Next
-            </button>
+            </p>
+            {show && <button onClick={flipHandler}>Flip</button>}
+            {!show && <button onClick={nextHandler}>Next</button>}
           </div>
         </div>
       </div>
     );
+  }
 }
 
 export default Study;

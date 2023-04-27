@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
-  Link,
-  Switch,
-  useHistory,
-  useLocation,
-  useRouteMatch,
-  useParams,
   NavLink,
   Route,
 } from "react-router-dom";

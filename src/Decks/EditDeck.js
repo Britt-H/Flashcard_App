@@ -1,34 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
+  Route,
   Link,
   Switch,
   useHistory,
   useLocation,
   useRouteMatch,
   useParams,
-  NavLink,
 } from "react-router-dom";
-import { updateDeck } from "../utils/api";
+import { updateDeck, readDeck } from "../utils/api";
 
 function EditDeck({ deckList, buildDeckList }) {
-  const { deckId } = useParams();
   const history = useHistory();
+  const { deckId } = useParams();
+  const [deck, setDeck] = useState({});
 
-  let targetDeck = deckList.find((deck) => {
-    return Number(deck.id) === Number(deckId);
-  });
+  useEffect(() => {
+    readDeck(deckId).then((res) => {
+      setDeck(res);
+    });
+  }, []);
 
-
-  let defaultForm = {
+  let initialFormData = {
     name: "",
     description: "",
   };
 
+  const [formData, setFormData] = useState(initialFormData);
 
-  const [formData, setFormData] = useState(defaultForm);
-
-  function handleInput(event) {
+  function handleInputChange(event) {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
@@ -37,7 +38,7 @@ function EditDeck({ deckList, buildDeckList }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    formData.id = targetDeck && targetDeck.id
+    formData.id = deck && deck.id;
     updateDeck(formData).then((res) => {
       buildDeckList();
       history.push(`/decks/${res.id}`);
@@ -45,45 +46,47 @@ function EditDeck({ deckList, buildDeckList }) {
   }
 
   return (
-    <div>
+    <React.Fragment>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item">
             <Link to="/">Home</Link>
           </li>
           <li className="breadcrumb-item">
-            <Link to={`/decks/${deckId}`}>{targetDeck && targetDeck.name}</Link>
+            <Link to={`/decks/${deckId}`}>{deck && deck.name}</Link>
           </li>
-          <li className="breadcrumb-item">Edit Deck</li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Edit Deck
+          </li>
         </ol>
       </nav>
-      <form name="create">
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          placeholder={`${targetDeck && targetDeck.name}`}
-          value={formData.name}
-          onChange={handleInput}
-        />
-        <label htmlFor="description">Description</label>
-        <textarea
-          type="text"
-          id="description"
-          name="description"
-          placeholder={`${targetDeck && targetDeck.description}`}
-          value={formData.description}
-          onChange={handleInput}
-        />
-      </form>
-      <div>
-        <NavLink to={`/decks/${deckId}`}>
+
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            value={deck && deck.name}
+            onChange={handleInputChange}
+          />
+          <label htmlFor="description"></label>
+          Description
+          <textarea
+            type="text"
+            name="description"
+            id="description"
+            value={deck && deck.description}
+            onChange={handleInputChange}
+          ></textarea>
+        </div>
+        <Link to={`/decks/${deckId}`}>
           <button>Cancel</button>
-        </NavLink>
+        </Link>
         <button onClick={handleSubmit}>Submit</button>
-      </div>
-    </div>
+      </form>
+    </React.Fragment>
   );
 }
 
