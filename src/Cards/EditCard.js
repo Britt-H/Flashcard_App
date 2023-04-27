@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { readCard, readDeck, updateCard } from "../utils/api";
 
-function EditCard({ deckList, buildDeckList }) {
+function EditCard({ buildDeckList }) {
   const { deckId, cardId } = useParams();
   const history = useHistory();
 
@@ -17,8 +17,6 @@ function EditCard({ deckList, buildDeckList }) {
   useEffect(() => {
     readDeck(deckId).then((res) => {
       setDeck(res);
-      console.log(deck);
-      console.log(res);
       readCard(cardId).then((res) => {
         setCard(res);
       });
@@ -43,7 +41,6 @@ function EditCard({ deckList, buildDeckList }) {
     event.preventDefault();
     readDeck(deckId).then((res) => {
       readCard(cardId).then((res) => {
-        console.log(res);
         formData.id = res.id;
         formData.deckId = res.deckId;
 

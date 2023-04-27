@@ -11,19 +11,17 @@ function EditDeck({ buildDeckList }) {
   const history = useHistory();
   const { deckId } = useParams();
   const [deck, setDeck] = useState({});
+  const [formData, setFormData] = useState({ name: '', description: '' });
 
   useEffect(() => {
     readDeck(deckId).then((res) => {
       setDeck(res);
+      setFormData({
+        name: res.name,
+        description: res.description,
+      });
     });
-  }, []);
-
-  let initialFormData = {
-    name: "",
-    description: "",
-  };
-
-  const [formData, setFormData] = useState(initialFormData);
+  }, [deckId]);
 
   function handleInputChange(event) {
     setFormData({
@@ -64,7 +62,7 @@ function EditDeck({ buildDeckList }) {
             type="text"
             name="name"
             id="name"
-            value={deck && deck.name}
+            value={formData.name}
             onChange={handleInputChange}
           />
           <label htmlFor="description"></label>
@@ -73,7 +71,7 @@ function EditDeck({ buildDeckList }) {
             type="text"
             name="description"
             id="description"
-            value={deck && deck.description}
+            value={formData.description}
             onChange={handleInputChange}
           ></textarea>
         </div>
