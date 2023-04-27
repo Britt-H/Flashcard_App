@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
-  Route,
   Link,
-  Switch,
   useHistory,
-  useLocation,
-  useRouteMatch,
   useParams,
 } from "react-router-dom";
 import { readCard, readDeck, updateCard } from "../utils/api";

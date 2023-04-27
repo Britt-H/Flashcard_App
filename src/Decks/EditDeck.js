@@ -1,17 +1,13 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
-  Route,
   Link,
-  Switch,
   useHistory,
-  useLocation,
-  useRouteMatch,
   useParams,
 } from "react-router-dom";
 import { updateDeck, readDeck } from "../utils/api";
 
-function EditDeck({ deckList, buildDeckList }) {
+function EditDeck({ buildDeckList }) {
   const history = useHistory();
   const { deckId } = useParams();
   const [deck, setDeck] = useState({});

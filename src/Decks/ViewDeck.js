@@ -7,10 +7,7 @@ import {
 } from "react-router-dom";
 import { deleteDeck, deleteCard, readDeck } from "../utils/api";
 
-//NEEDS TO USE readDeck function
-//MAY NEED TO LOOK AT OTHER COMPONENTS REQUIREMENTS
-
-function ViewDeck({ deckList, buildDeckList }) {
+function ViewDeck({ buildDeckList }) {
   const { deckId } = useParams();
   const [deck, setDeck] = useState({})
 
@@ -20,14 +17,6 @@ function ViewDeck({ deckList, buildDeckList }) {
             setDeck(res)
         })       
 },[])
-
-  //Might replace targetDeck with readDeck use
-  // let targetDeck = deckList.find((deck) => {
-  //   return Number(deck.id) === Number(deckId);
-  // });
-
-
-  
 
   const history = useHistory();
 

@@ -32,7 +32,6 @@ function Layout() {
     <div>
       <Header />
       <div className="container">
-        {/* TODO: Implement the screen starting here */}
         <Switch>
           <Route path="/decks/:deckId/cards/:cardId/edit">
             <EditCard deckList={deckList} buildDeckList={buildDeckList} />
